@@ -12,20 +12,22 @@
         #piezas {
             display: flex;
             flex-wrap: wrap;
-            width: 400px;
-            border-radius: 50%;
+            width: 200px;
             margin: auto;
             justify-content: center;
         }
 
         #puzzle {
             border: 1px solid black;
-            width: 318px;
-            height: 495px;
+            width: 700px;
+            height: 1000px;
             display: flex;
             flex-wrap: wrap;
             margin: auto;
-            background-image: url('');
+            background-image: url('Reino_unido.jpg');
+            background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat;
         }
 
         .pieza {
@@ -39,7 +41,7 @@
 
         }
 
-        .placeholder {
+        .Irlanda_del_norte {
             background-color: #F2F2F2;
             outline: 1px solid #333;
             border-radius: 50%;
@@ -48,11 +50,59 @@
             transition: 1s;
         }
 
-        .placeholder.hover {
+        .Irlanda_del_norte.hover {
             background-color: orange;
         }
 
-        .placeholder .pieza {
+        .Irlanda_del_norte .pieza {
+            margin: 0;
+        }
+        .Inglaterra {
+            background-color: #F2F2F2;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
+        }
+
+        .Inglaterra.hover {
+            background-color: orange;
+        }
+
+        .Inglaterra .pieza {
+            margin: 0;
+        }
+        .Pais_de_gales {
+            background-color: #F2F2F2;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
+        }
+
+        .Pais_de_gales.hover {
+            background-color: orange;
+        }
+
+        .Pais_de_gales .pieza {
+            margin: 0;
+        }
+        .Escocia {
+            background-color: #F2F2F2;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
+        }
+
+        .Escocia.hover {
+            background-color: orange;
+        }
+
+        .Escocia .pieza {
             margin: 0;
         }
 
@@ -94,9 +144,10 @@
     
     <script>
         const Reino_unido = [
-            'Inglaterra', 'Escocia', 'País de Gales',
-            'Irlanda del Norte'
+            'Inglaterra', 'Escocia', 'País_de_gales',
+            'Irlanda_del_norte'
         ];
+
 
         const puzzle = document.getElementById('puzzle');
         const piezas = document.getElementById('piezas');
@@ -110,18 +161,15 @@
             div.className = 'pieza';
             div.id = Reino_unido[index];
             div.draggable = true;
-            //style.textAlign = center;
             div.textContent = Reino_unido[index];
             piezas.appendChild(div);
             Reino_unido.splice(index, 1);
         }
 
-        for (let i = 0; i < terminado; i++) {
-            const div = document.createElement('div');
-            div.className = 'placeholder';
-            div.dataset.id = i;
-            puzzle.appendChild(div);
-        }
+        const div = document.createElement('div');
+        div.className = Reino_unido[i];
+        div.dataset.id = i;
+        puzzle.appendChild(div);
 
 
         piezas.addEventListener('dragstart', e => {
