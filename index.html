@@ -13,6 +13,7 @@
             display: flex;
             flex-wrap: wrap;
             width: 400px;
+            border-radius: 50%;
             margin: auto;
             justify-content: center;
         }
@@ -27,17 +28,22 @@
         }
 
         .pieza {
-            width: 106px;
-            height: 165px;
+            width: 165px;
+            height: 105px;
             background-size: cover;
             margin: 10px;
+            border-radius: 50%;
+            background-color: yellow;
+            text
+
         }
 
         .placeholder {
             background-color: #F2F2F2;
             outline: 1px solid #333;
-            width: 106px;
-            height: 165px;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
             transition: 1s;
         }
 
@@ -86,27 +92,27 @@
    
     
     <script>
-        const imagenes = [
-            'imagen-0', 'imagen-1', 'imagen-2',
-            'imagen-3', 'imagen-4', 'imagen-5',
-            'imagen-6', 'imagen-7', 'imagen-8'
+        const Reino_unido = [
+            'Inglaterra', 'Escocia', 'País de Gales',
+            'Irlanda del Norte'
         ];
 
         const puzzle = document.getElementById('puzzle');
         const piezas = document.getElementById('piezas');
         const mensaje = document.getElementById('mensaje');
 
-        let terminado = imagenes.length;
+        let terminado = Reino_unido.length;
         
-        while (imagenes.length) {
-            const index = Math.floor(Math.random() * imagenes.length);
+        while (Reino_unido.length) {
+            const index = Math.floor(Math.random() * Reino_unido.length);
             const div = document.createElement('div');
             div.className = 'pieza';
-            div.id = imagenes[index];
+            div.id = Reino_unido[index];
             div.draggable = true;
-            div.style.backgroundImage = `url("recursos/${imagenes[index]}.jpg")`;
+            //style.textAlign = center;
+            div.textContent = Reino_unido[index];
             piezas.appendChild(div);
-            imagenes.splice(index, 1);
+            Reino_unido.splice(index, 1);
         }
 
         for (let i = 0; i < terminado; i++) {
