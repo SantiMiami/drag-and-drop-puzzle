@@ -59,8 +59,8 @@
         }
         .Republica_de_irlanda {
             position: relative;
-            top: 600px;
-            right: 320px;
+            top: 80px;
+            left: 30px;
             background-color: #fffb00;
             outline: 1px solid #333;
             border-radius: 50%;
@@ -224,55 +224,28 @@
         const mensaje = document.getElementById('mensaje');
 
         let terminado = Reino_unido.length;
-        
-        while (Reino_unido.length) {
-            const index = Math.floor(Math.random() * Reino_unido.length);
+
+        // Crear las piezas y agregarlas al contenedor de piezas
+        Reino_unido.forEach(pais => {
             const div = document.createElement('div');
             div.className = 'pieza';
-            div.id = Reino_unido[index];
+            div.id = pais;
             div.draggable = true;
-            div.textContent = Reino_unido[index];
-            div.style.backgroundImage = Reino_unido[index];
+            div.textContent = pais;
+            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             piezas.appendChild(div);
-            Reino_unido.splice(index, 1);
-        }
-        //for (let i = 0; i < terminado; i++) {
-        const div1 = document.createElement('div');
-        div1.className = 'Escocia';
-        div1.dataset.id = 'Escocia';
-        div1.textContent = 'Escocia';
-        puzzle.appendChild(div1);
-        
-        const div2 = document.createElement('div');
-        div2.className = 'Pais_de_gales';
-        div2.dataset.id = 'Pais_de_gales';
-        div2.textContent = 'Pais_de_gales';
-        puzzle.appendChild(div2);
+        });
 
-        const div3 = document.createElement('div');
-        div3.className = 'Republica_de_irlanda';
-        div3.dataset.id = 'Republica_de_irlanda';
-        div3.textContent = 'Republica_de_irlanda';
-        puzzle.appendChild(div3);
+        // Crear las áreas del rompecabezas
+        Reino_unido.forEach(pais => {
+            const div = document.createElement('div');
+            div.className = pais;
+            div.dataset.id = pais;
+            div.textContent = pais;
+            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
+            puzzle.appendChild(div);
+        });
 
-        const div4 = document.createElement('div');
-        div4.className = 'Irlanda_del_norte';
-        div4.dataset.id = 'Irlanda_del_norte';
-        div4.textContent = 'Irlanda_del_norte';
-        puzzle.appendChild(div4);
-
-        const div5 = document.createElement('div');
-        div5.className = 'Inglaterra';
-        div5.dataset.id = 'Inglaterra';
-        div5.textContent = 'Inglaterra';
-        puzzle.appendChild(div5);
-
-        const div6 = document.createElement('div');
-        div6.className = 'Londres';
-        div6.dataset.id = 'Londres';
-        div6.textContent = 'Londres';
-        puzzle.appendChild(div6);
-      
         piezas.addEventListener('dragstart', e => {
             e.dataTransfer.setData('id', e.target.id);
         });
@@ -287,18 +260,15 @@
         });
 
         puzzle.addEventListener('drop', e => {
+            e.preventDefault();
             e.target.classList.remove('hover');
 
             const id = e.dataTransfer.getData('id');
-            const pais = id;
+            const pieza = document.getElementById(id);
 
-            console.log('Pais: ',pais);
-            console.log('caja: ',e.target.dataset.id);
-
-
-            if (e.target.dataset.id === pais) {
-                e.target.appendChild(document.getElementById(id));
-
+            // Verifica que el elemento de destino sea válido
+            if (e.target.dataset.id === id) {
+                e.target.appendChild(pieza);
                 terminado--;
 
                 if (terminado === 0) {
