@@ -24,7 +24,7 @@
             display: flex;
             flex-wrap: wrap;
             margin: auto;
-            background-image: url('Reino_unido.jpg');
+            background-image: url('Reino_unido.png');
             background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
             background-position: center; /* Centra la imagen */
             background-repeat: no-repeat;
@@ -41,8 +41,49 @@
 
         }
 
-        .Irlanda_del_norte {
+        .placeholder {
             background-color: #F2F2F2;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
+        }
+
+        .placeholder.hover {
+            background-color: orange;
+        }
+
+        .placeholder .pieza {
+            margin: 0;
+        }
+        .Republica_de_irlanda {
+            position: relative;
+            top: 600px;
+            right: 320px;
+            background-color: #fffb00;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
+        }
+
+        .Republica_de_irlanda.hover {
+            background-color: orange;
+        }
+
+        .Republica_de_irlanda .pieza {
+            margin: 0;
+        }
+
+
+
+        .Irlanda_del_norte {
+            position: relative;
+            top: 450px;
+            right: 380px;
+            background-color: #00ff37;
             outline: 1px solid #333;
             border-radius: 50%;
             width: 165px;
@@ -58,7 +99,10 @@
             margin: 0;
         }
         .Inglaterra {
-            background-color: #F2F2F2;
+            position: relative;
+            left: 450px;
+            top: 60px;
+            background-color: #ff00b3;
             outline: 1px solid #333;
             border-radius: 50%;
             width: 165px;
@@ -74,7 +118,10 @@
             margin: 0;
         }
         .Pais_de_gales {
-            background-color: #F2F2F2;
+            position: relative;
+            top: 730px;
+            left: 120px;
+            background-color: #2600ff;
             outline: 1px solid #333;
             border-radius: 50%;
             width: 165px;
@@ -89,8 +136,12 @@
         .Pais_de_gales .pieza {
             margin: 0;
         }
+
         .Escocia {
-            background-color: #F2F2F2;
+            position: relative;
+            top: 170px;
+            left: 280px;
+            background-color: #ce0808;
             outline: 1px solid #333;
             border-radius: 50%;
             width: 165px;
@@ -102,7 +153,27 @@
             background-color: orange;
         }
 
-        .Escocia .pieza {
+        .Escocia.pieza {
+            margin: 0;
+        }
+
+        .Londres {
+            position: relative;
+            top: 210px;
+            left: 360px;
+            background-color: #08cece;
+            outline: 1px solid #333333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
+        }
+
+        .Londres.hover {
+            background-color: orange;
+        }
+
+        .Londres.pieza {
             margin: 0;
         }
 
@@ -145,7 +216,7 @@
     <script>
         const Reino_unido = [
             'Inglaterra', 'Escocia', 'País_de_gales',
-            'Irlanda_del_norte'
+            'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
         ];
 
 
@@ -165,13 +236,43 @@
             piezas.appendChild(div);
             Reino_unido.splice(index, 1);
         }
+        //for (let i = 0; i < terminado; i++) {
+        const div1 = document.createElement('div');
+        div1.className = 'Escocia';
+        div1.dataset.id = 1;
+        div1.textContent = 'Escocia';
+        puzzle.appendChild(div1);
+        
+        const div2 = document.createElement('div');
+        div2.className = 'Pais_de_gales';
+        div2.dataset.id = 2;
+        div2.textContent = 'Pais_de_gales';
+        puzzle.appendChild(div2);
 
-        const div = document.createElement('div');
-        div.className = Reino_unido[i];
-        div.dataset.id = i;
-        puzzle.appendChild(div);
+        const div3 = document.createElement('div');
+        div3.className = 'Republica_de_irlanda';
+        div3.dataset.id = 3;
+        div3.textContent = 'Republica_de_irlanda';
+        puzzle.appendChild(div3);
 
+        const div4 = document.createElement('div');
+        div4.className = 'Irlanda_del_norte';
+        div4.dataset.id = 4;
+        div4.textContent = 'Irlanda_del_norte';
+        puzzle.appendChild(div4);
 
+        const div5 = document.createElement('div');
+        div5.className = 'Inglaterra';
+        div5.dataset.id = 5;
+        div5.textContent = 'Inglaterra';
+        puzzle.appendChild(div5);
+
+        const div6 = document.createElement('div');
+        div6.className = 'Londres';
+        div6.dataset.id = 6;
+        div6.textContent = 'Londres';
+        puzzle.appendChild(div6);
+      
         piezas.addEventListener('dragstart', e => {
             e.dataTransfer.setData('id', e.target.id);
         });
@@ -189,9 +290,10 @@
             e.target.classList.remove('hover');
 
             const id = e.dataTransfer.getData('id');
-            const numero = id.split('-')[1];
+            const pais = id;
 
-            if (e.target.dataset.id === numero) {
+
+            if (e.target.dataset.id === pais) {
                 e.target.appendChild(document.getElementById(id));
 
                 terminado--;
