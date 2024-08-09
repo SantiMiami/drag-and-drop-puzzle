@@ -101,7 +101,7 @@
         .Inglaterra {
             position: relative;
             left: 450px;
-            top: 60px;
+            top: 600px;
             background-color: #ff00b3;
             outline: 1px solid #333;
             border-radius: 50%;
@@ -120,7 +120,7 @@
         .Pais_de_gales {
             position: relative;
             top: 730px;
-            left: 120px;
+            left: 10px;
             background-color: #2600ff;
             outline: 1px solid #333;
             border-radius: 50%;
@@ -140,7 +140,7 @@
         .Escocia {
             position: relative;
             top: 170px;
-            left: 280px;
+            left: 110px;
             background-color: #ce0808;
             outline: 1px solid #333;
             border-radius: 50%;
@@ -231,7 +231,7 @@
             div.className = 'pieza';
             div.id = pais;
             div.draggable = true;
-            div.textContent = pais;
+            //div.textContent = pais;
             div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             piezas.appendChild(div);
         });
@@ -241,8 +241,8 @@
             const div = document.createElement('div');
             div.className = pais;
             div.dataset.id = pais;
-            div.textContent = pais;
-            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
+            //div.textContent = pais;
+            //div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             puzzle.appendChild(div);
         });
 
