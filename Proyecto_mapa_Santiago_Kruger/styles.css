@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.map-container {
+    position: relative;
+    width: 50%; /* Ajusta el tamaño según sea necesario */
+    height: 40%;
+    padding-bottom: 56.25%; /* Mantén una proporción de aspecto 16:9 */
+}
+
+.map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.city {
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.6); /* Fondo semi-transparente */
+    padding: 5px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transform: translate(-50%, -50%); /* Centra el texto */
+}
+
+/* Ejemplo de posicionamiento de las ciudades usando porcentajes */
+#new-york {
+    position: center;
+    top: 45%;
+    left: 60%;
+}
+
+#los-angeles {
+    top: 60%;
+    left: 68%;
+}
+
+#chicago {
+    top: 50%;
+    left: 12%;
+}
+
+
+.info-container {
+    display: none;
+    position: absolute;
+    background-color: #d31414;
+    border: 1px solid #200505;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+}
+.info-container img {
+    max-width: 100%;
+    height: auto;
+}
