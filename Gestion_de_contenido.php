@@ -2,7 +2,7 @@
 $servername = "localhost"; // Cambia esto al servidor de tu base de datos
 $username = "root"; // Cambia esto a tu nombre de usuario de MySQL
 $password = ""; // Cambia esto a tu contraseña de MySQL
-$database = "MAPA EEUU"; // Cambia esto a tu nombre de base de datos
+$database = "reino unido"; // Cambia esto a tu nombre de base de datos
 // Crea la conexión a la base de datos
 $conn = new mysqli($servername, $username, $password, $database);
 // Verifica la conexión
@@ -15,9 +15,11 @@ session_start();
 if (!isset($_SESSION['Tiempo']))$_SESSION['Tiempo'] = time();
 $Segundos = time() - $_SESSION['Tiempo'];
 
-/*if (!$_POST['username'] and !$_POST['password'] and !$_POST['r_username'] and !$_POST['r_password']){
-    header("Location: Formulario.php");
-}*/
+
+
+if (!$_POST['username'] and !$_POST['password'] and !$_POST['r_username'] and !$_POST['r_password']){
+    header("Location: Inicio_de_sesion.php");
+}
 
 
 //Si se ha registrado un usuario
@@ -25,14 +27,11 @@ if (isset($_POST['username']) and isset($_POST['password'])){
     //Recepcion de datos
     $Usuario = $_POST['username'];
     $Contraseña = $_POST['password'];
-    //$r_DNI = $_POST['DNI'];
-    //$Security_Cuestion = $_POST['Security_cuestion'];
-    //$Answer = $_POST['Answer'];
+
 
     //Encriptacion
     $contraseñaEncr = md5($Contraseña); //Contraseña
     $usuarioEncr = md5($Usuario); //Usuario
-    //$DNIEncr = md5($r_DNI);
 }
 
 //Registro de sesion
@@ -41,8 +40,8 @@ if (isset($Usuario) and isset($Contraseña)) { //Si se han ingresado datos de re
     $strSearchUser = $Usuario;
     $strSearchPass = $contraseñaEncr;
     $TableUser = 'usuario';
-    $ColUser = 'Usuario';
-    $ColPass = 'Contraseña';
+    $ColUser = 'nombre';
+    $ColPass = 'contraseña';
 
     // Consulta SQL
     $sql = "SELECT * FROM $TableUser WHERE $ColUser = ?";
@@ -53,7 +52,9 @@ if (isset($Usuario) and isset($Contraseña)) { //Si se han ingresado datos de re
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        header("Location: index.html");
+        header("Location: neandex.php?nombre=" . urlencode($Usuario) . "&contraseña=" . urlencode($contraseñaEncr));
+        exit();
+
     } else {
         echo "Usuario no disponible, porfavor, registrese para obtener una cuenta";
     }
@@ -71,24 +72,19 @@ if (isset($_POST['r_username']) and isset($_POST['r_password'])){
     //Recepcion de datos
     $r_usuario = $_POST['r_username'];
     $r_contraseña = $_POST['r_password'];
-    //$r_DNI = $_POST['DNI'];
-    //$Security_Cuestion = $_POST['Security_cuestion'];
-    //$Answer = $_POST['Answer'];
 
     //Encriptacion
     $contraseñaEncr = md5($r_contraseña); //Contraseña
     $usuarioEncr = md5($r_usuario); //Usuario
-    //$DNIEncr = md5($r_DNI);
 }
-
 //Registro de sesion
 if (isset($r_usuario) and isset($r_contraseña)) { //Si se han ingresado datos de registro  
     // Variables para la búsqueda
     $strSearchUser = $r_usuario;
     $strSearchPass = $contraseñaEncr;
     $TableUser = 'usuario';
-    $ColUser = 'Usuario';
-    $ColPass = 'Contraseña';
+    $ColUser = 'nombre';
+    $ColPass = 'contraseña';
 
     // Consulta SQL
     $sql = "SELECT * FROM $TableUser WHERE $ColUser = ?";
@@ -102,7 +98,7 @@ if (isset($r_usuario) and isset($r_contraseña)) { //Si se han ingresado datos d
         echo "Este usuario ya esta registrado, porfavor, inicie sesión";
     } else {
         echo "No se encuentra disponible";
-        $sql = "INSERT INTO `usuario`(`Usuario`, `Contraseña`) VALUES (?, ?)";
+        $sql = "INSERT INTO `usuario`(`nombre`, `contraseña`) VALUES (?, ?)";
         $stmtInsert = $conn->prepare($sql);
         $stmtInsert->bind_param("ss", $strSearchUser, $strSearchPass); // "ss" indica que ambos parámetros son cadenas de texto
         if ($stmtInsert->execute()) {
@@ -122,8 +118,8 @@ if (isset($r_usuario) and isset($r_contraseña)) { //Si se han ingresado datos d
         exit();
     }
 }
-/*    if (!file_exists("usuario.txt")){
-        /*fopen("usuario.txt", "w");
+        /*if (!file_exists("usuario.txt")){
+        fopen("usuario.txt", "w");
         $archUsuario = "usuario.txt"; 
         $dato_usuario = fopen($archUsuario, "r+");
         fwrite($dato_usuario, $usuarioEncr);

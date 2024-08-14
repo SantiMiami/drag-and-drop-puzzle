@@ -25,8 +25,8 @@
             flex-wrap: wrap;
             margin: auto;
             background-image: url('Reino_unido.png');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
+            background-position: center; /* Centra la imagen */
             background-repeat: no-repeat;
         }
 
@@ -36,10 +36,9 @@
             background-size: cover;
             margin: 10px;
             border-radius: 50%;
-            background-size: cover;
-            background-position: center;
+            background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
+            background-position: center; /* Centra la imagen */
             background-repeat: no-repeat;
-            cursor: pointer; /* Indica que es clickeable */
         }
 
         .placeholder {
@@ -58,63 +57,124 @@
         .placeholder .pieza {
             margin: 0;
         }
-        
-        .Republica_de_irlanda,
-        .Irlanda_del_norte,
-        .Inglaterra,
-        .Pais_de_gales,
-        .Escocia,
-        .Londres {
+        .Republica_de_irlanda {
             position: relative;
+            top: 80px;
+            left: 30px;
+            background-color: #fffb00;
+            outline: 1px solid #333;
             border-radius: 50%;
             width: 165px;
             height: 106px;
             transition: 1s;
         }
 
-        /* Estilos específicos para las áreas del puzzle */
-        .Republica_de_irlanda {
-            background-color: #fffb00;
-            top: 80px;
-            left: 30px;
+        .Republica_de_irlanda.hover {
+            background-color: orange;
         }
-        .Irlanda_del_norte { 
-            background-color: #00ff37;
+
+        .Republica_de_irlanda .pieza {
+            margin: 0;
+        }
+
+
+
+        .Irlanda_del_norte {
+            position: relative;
             top: 450px;
             right: 380px;
+            background-color: #00ff37;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
         }
-        .Inglaterra { 
-            background-color: #ff00b3;
+
+        .Irlanda_del_norte.hover {
+            background-color: orange;
+        }
+
+        .Irlanda_del_norte .pieza {
+            margin: 0;
+        }
+        .Inglaterra {
+            position: relative;
             left: 450px;
-            top: 600px; 
+            top: 600px;
+            background-color: #ff00b3;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
         }
-        .Pais_de_gales { 
-            background-color: #2600ff;
+
+        .Inglaterra.hover {
+            background-color: orange;
+        }
+
+        .Inglaterra .pieza {
+            margin: 0;
+        }
+        .Pais_de_gales {
+            position: relative;
             top: 730px;
             left: 10px;
+            background-color: #2600ff;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
         }
-        .Escocia { 
-            background-color: #ce0808;
+
+        .Pais_de_gales.hover {
+            background-color: orange;
+        }
+
+        .Pais_de_gales .pieza {
+            margin: 0;
+        }
+
+        .Escocia {
+            position: relative;
             top: 170px;
-            left: 110px; 
+            left: 110px;
+            background-color: #ce0808;
+            outline: 1px solid #333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
         }
+
+        .Escocia.hover {
+            background-color: orange;
+        }
+
+        .Escocia.pieza {
+            margin: 0;
+        }
+
         .Londres {
-            top: 215px;
-            left: 350px; 
-            background-color: #08cece; 
+            position: relative;
+            top: 210px;
+            left: 360px;
+            background-color: #08cece;
+            outline: 1px solid #333333;
+            border-radius: 50%;
+            width: 165px;
+            height: 106px;
+            transition: 1s;
         }
 
-        /* Estilos para cuando el puzzle está completado */
-        .ganaste {
-            background-color: #B3D67C;
+        .Londres.hover {
+            background-color: orange;
         }
 
-        .ganaste #mensaje {
-            display: block;
-        }
-
-        .ganaste #piezas {
-            display: none;
+        .Londres.pieza {
+            margin: 0;
         }
 
         #mensaje {
@@ -123,15 +183,25 @@
             display: none;
         }
 
-        .infoBox {
+        .ganaste {
+            background-color: #B3D67C;
+        }
+
+        .ganaste #mensaje {
+            display: block;
+        }
+
+        .ganaste .placeholder {
+            outline: none;
+        }
+
+        .ganaste #piezas {
             display: none;
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -141,21 +211,17 @@
         <div id="piezas"></div>
     </div>
     <h1 id="mensaje">¡Ganaste!</h1>
-
-    <!-- Contenedor para mostrar la información de la pieza -->
-    <div id="infoBox" class="infoBox"></div>
-
+   
+    
     <script>
         const Reino_unido = [
             'Inglaterra', 'Escocia', 'Pais_de_gales',
             'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
         ];
-        
 
         const puzzle = document.getElementById('puzzle');
         const piezas = document.getElementById('piezas');
         const mensaje = document.getElementById('mensaje');
-        const infoBox = document.getElementById('infoBox');
 
         let terminado = Reino_unido.length;
 
@@ -165,16 +231,23 @@
             div.className = 'pieza';
             div.id = pais;
             div.draggable = true;
-            // Agregar información a la pieza
-            div.style.backgroundImage = `url('images/${pais}.png')`;
+            //div.textContent = pais;
+            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             piezas.appendChild(div);
         });
+        const boton = document.getElementById("");
+                boton.addEventListener('click', () => {
+                alert('boton presionado');
+                });
+
 
         // Crear las áreas del rompecabezas
         Reino_unido.forEach(pais => {
             const div = document.createElement('div');
             div.className = pais;
             div.dataset.id = pais;
+            //div.textContent = pais;
+            //div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             puzzle.appendChild(div);
         });
 
@@ -198,21 +271,22 @@
             const id = e.dataTransfer.getData('id');
             const pieza = document.getElementById(id);
 
+            // Verifica que el elemento de destino sea válido
             if (e.target.dataset.id === id) {
                 e.target.appendChild(pieza);
                 terminado--;
 
                 if (terminado === 0) {
                     document.body.classList.add('ganaste');
-                    // Añadir lógica para convertir piezas en botones
-                    document.querySelectorAll('.pieza').forEach(pieza => {
-                        pieza.style.cursor = 'pointer';
-                        pieza.addEventListener('click', () => {
-                            infoBox.textContent = pieza.dataset.info;
-                            infoBox.style.display = 'block';
-                        });
-                    });
+                    document.getElementById('infoButton').style.display = 'block';
                 }
+            }
+        });
+
+        document.getElementById('infoButton').addEventListener('click', () => {
+        const pieza = document.querySelector('.puzzle .pieza'); // Asegúrate de seleccionar la pieza correcta
+        if (pieza) {
+                mostrarInformacion(pieza);
             }
         });
 

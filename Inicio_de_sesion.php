@@ -44,7 +44,6 @@
             document.getElementById('session-expired').style.display = 'block';
         </script>
     <?php endif; ?>
-    
 
     <div id="session-expired" style="display:none; color:red;">
         La sesión ha expirado.
