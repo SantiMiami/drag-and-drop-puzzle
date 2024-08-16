@@ -8,6 +8,24 @@
         body {
             font-family: Arial, Verdana, sans-serif;
         }
+        #infoBox {
+            display: none; /* Ocultar inicialmente */
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Estilo del botón */
+        #toggleButton {
+            display: none; /* Ocultar inicialmente */
+        }
 
         #piezas {
             display: flex;
@@ -211,7 +229,13 @@
         <div id="piezas"></div>
     </div>
     <h1 id="mensaje">¡Ganaste!</h1>
-   
+    <div id="infoBox">
+        <h2>Información</h2>
+        <textarea id="infoContent" rows="10" cols="50">Texto editable...</textarea>
+        <br>
+        <button onclick="saveInfo()">Guardar</button>
+    </div>
+    <button id="toggleButton" onclick="toggleInfoBox()">Mostrar Recuadro</button>
     
     <script>
         const Reino_unido = [
@@ -235,10 +259,8 @@
             div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             piezas.appendChild(div);
         });
-        const boton = document.getElementById("");
-                boton.addEventListener('click', () => {
-                alert('boton presionado');
-                });
+        const boton = document.getElementById("piezas");
+                
 
 
         // Crear las áreas del rompecabezas
@@ -274,6 +296,14 @@
             // Verifica que el elemento de destino sea válido
             if (e.target.dataset.id === id) {
                 e.target.appendChild(pieza);
+                e.target.addEventListener('click', () => {
+                        if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+                            infoBox.style.display = 'block';
+                        } else {
+                            infoBox.style.display = 'none';
+                        }
+                    }
+                );
                 terminado--;
 
                 if (terminado === 0) {
