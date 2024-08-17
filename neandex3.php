@@ -263,90 +263,96 @@ echo "<h1>".$contraseña."</h1>";
     ?>
 
 
-    <script>
-        const Reino_unido = [
-            'Inglaterra', 'Escocia', 'Pais_de_gales',
-            'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
-        ];
+<script>
+    const Reino_unido = [
+        'Inglaterra', 'Escocia', 'Pais_de_gales',
+        'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
+    ];
 
-        const puzzle = document.getElementById('puzzle');
-        const piezas = document.getElementById('piezas');
-        const mensaje = document.getElementById('mensaje');
+    const puzzle = document.getElementById('puzzle');
+    const piezas = document.getElementById('piezas');
+    const mensaje = document.getElementById('mensaje');
+    const infoBox = document.getElementById('infoBox');
+    const infoContent = document.getElementById('infoContent');
 
-        let terminado = Reino_unido.length;
+    let terminado = Reino_unido.length;
 
-        // Crear las piezas y agregarlas al contenedor de piezas
-        Reino_unido.forEach(pais => {
-            const div = document.createElement('div');
-            div.className = 'pieza';
-            div.id = pais;
-            div.draggable = true;
-            //div.textContent = pais;
-            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
-            piezas.appendChild(div);
-        });
-        const boton = document.getElementById("piezas");
-                
+    // Crear las piezas y agregarlas al contenedor de piezas
+    Reino_unido.forEach(pais => {
+        const div = document.createElement('div');
+        div.className = 'pieza';
+        div.id = pais;
+        div.draggable = true;
+        div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
+        piezas.appendChild(div);
+    });
 
+    // Crear las áreas del rompecabezas
+    Reino_unido.forEach(pais => {
+        const div = document.createElement('div');
+        div.className = pais;
+        div.dataset.id = pais;
+        puzzle.appendChild(div);
+    });
 
-        // Crear las áreas del rompecabezas
-        Reino_unido.forEach(pais => {
-            const div = document.createElement('div');
-            div.className = pais;
-            div.dataset.id = pais;
-            //div.textContent = pais;
-            //div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
-            puzzle.appendChild(div);
-        });
+    piezas.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('id', e.target.id);
+    });
 
-        piezas.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('id', e.target.id);
-        });
+    puzzle.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.target.classList.add('hover');
+    });
 
-        puzzle.addEventListener('dragover', e => {
-            e.preventDefault();
-            e.target.classList.add('hover');
-        });
+    puzzle.addEventListener('dragleave', e => {
+        e.target.classList.remove('hover');
+    });
 
-        puzzle.addEventListener('dragleave', e => {
-            e.target.classList.remove('hover');
-        });
+    puzzle.addEventListener('drop', e => {
+        e.preventDefault();
+        e.target.classList.remove('hover');
 
-        puzzle.addEventListener('drop', e => {
-            e.preventDefault();
-            e.target.classList.remove('hover');
+        const id = e.dataTransfer.getData('id');
+        const pieza = document.getElementById(id);
 
-            const id = e.dataTransfer.getData('id');
-            const pieza = document.getElementById(id);
+        // Verifica que el elemento de destino sea válido
+        if (e.target.dataset.id === id) {
+            e.target.appendChild(pieza);
 
-            // Verifica que el elemento de destino sea válido
-            if (e.target.dataset.id === id) {
-                const pais = e.target.dataset.id;
-                infoBox.textContent = pais;
-                e.target.appendChild(pieza);
-                e.target.addEventListener('click', () => {
-                    infoBox.style.display = 'block'; 
-                    /*if (infoBox.style.display === 'block') {
-                        // Si infoBox está visible, ocultarlo
-                        infoBox.style.display = 'none'; 
-                    }*/
-                });
-                terminado--;
+            // Mostrar información del país
+            const pais = e.target.dataset.id;
+            infoContent.textContent = pais;
+            infoBox.style.display = 'block'; // Mostrar el recuadro de información
 
-                if (terminado === 0) {
-                    document.body.classList.add('ganaste');
-                    document.getElementById('infoButton').style.display = 'block';
-                }
+            terminado--;
+
+            if (terminado === 0) {
+                document.body.classList.add('ganaste');
             }
-        });
+        }
+    });
 
-        document.getElementById('infoButton').addEventListener('click', () => {
-        const pieza = document.querySelector('.puzzle .pieza'); // Asegúrate de seleccionar la pieza correcta
-        if (pieza) {
-                mostrarInformacion(pieza);
-            }
-        });
-    </script>
+    // Función para guardar la información (opcional)
+    function saveInfo() {
+        // Implementar lógica para guardar información si es necesario
+        alert('Información guardada!');
+    }
+
+    // Mostrar y ocultar el infoBox
+    function toggleInfoBox() {
+        if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+            infoBox.style.display = 'block';
+        } else {
+            infoBox.style.display = 'none';
+        }
+    }
+
+    // Mostrar el infoBox por defecto si es admin
+    if (document.getElementById('toggleButton')) {
+        document.getElementById('toggleButton').addEventListener('click', toggleInfoBox);
+    }
+</script>
+
     <?php
      /*if ($usuario == 'admin' and $contraseña == md5('admin')){
         echo "
