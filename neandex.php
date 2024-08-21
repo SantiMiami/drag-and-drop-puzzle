@@ -265,13 +265,23 @@ echo "<h1>".$contraseña."</h1>";
 
     <script>
         const Reino_unido = [
-            'Inglaterra', 'Escocia', 'Pais_de_gales',
-            'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
+            { name: 'Inglaterra', image: 'images/Inglaterra.png', description: 'Descripción de Inglaterra' },
+            { name: 'Escocia', image: 'images/Escocia.png', description: 'Descripción de Escocia' },
+            { name: 'Pais_de_gales', image: 'images/Pais_de_gales.png', description: 'Descripción del País de Gales' },
+            { name: 'Irlanda_del_norte', image: 'images/Irlanda_del_norte.png', description: 'Descripción de Irlanda del Norte' },
+            { name: 'Republica_de_irlanda', image: 'images/Republica_de_irlanda.png', description: 'Descripción de la República de Irlanda' },
+            { name: 'Londres', image: 'images/Londres.png', description: 'Descripción de Londres' }
         ];
 
         const puzzle = document.getElementById('puzzle');
         const piezas = document.getElementById('piezas');
         const mensaje = document.getElementById('mensaje');
+        const infoContainer = document.getElementById('info-container');
+        const infoTitle = document.getElementById('info-title');
+        const infoDescription = document.getElementById('info-description');
+        const infoClose = document.getElementById('info-close');
+        const infoContent = document.getElementById('infoContent');
+        const infoBox = document.getElementById('infoBox');
 
         let terminado = Reino_unido.length;
 
@@ -279,23 +289,17 @@ echo "<h1>".$contraseña."</h1>";
         Reino_unido.forEach(pais => {
             const div = document.createElement('div');
             div.className = 'pieza';
-            div.id = pais;
+            div.id = pais.name;
             div.draggable = true;
-            //div.textContent = pais;
-            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
+            div.style.backgroundImage = `url('${pais.image}')`; // Asignar imagen de fondo
             piezas.appendChild(div);
         });
-        const boton = document.getElementById("piezas");
-                
-
 
         // Crear las áreas del rompecabezas
         Reino_unido.forEach(pais => {
             const div = document.createElement('div');
-            div.className = pais;
-            div.dataset.id = pais;
-            //div.textContent = pais;
-            //div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
+            div.className = 'placeholder puzzle-area ' + pais.name;
+            div.dataset.id = pais.name;
             puzzle.appendChild(div);
         });
 
@@ -312,6 +316,22 @@ echo "<h1>".$contraseña."</h1>";
             e.target.classList.remove('hover');
         });
 
+        function handleClickInside(event) {
+            console.log('Clic dentro del área.');
+        }
+
+        // Función para manejar el clic fuera del área
+        function handleClickOutside(event) {
+            if (!e.target.contains(event.target)) {
+                console.log('Clic fuera del área.');
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside);
+
+        // Agregar el evento de clic al área
+        puzzle.addEventListener('click', handleClickInside);
+
         puzzle.addEventListener('drop', e => {
             e.preventDefault();
             e.target.classList.remove('hover');
@@ -319,18 +339,43 @@ echo "<h1>".$contraseña."</h1>";
             const id = e.dataTransfer.getData('id');
             const pieza = document.getElementById(id);
 
+           
+            // Verificar si el clic no está dentro del elemento `infoBox` y no es el botón
+            function manejarClickFuera(event) {
+                // Obtén el elemento objetivo que deseas comprobar
+                const target = event.target;
+
+                // Comprueba si el clic fue fuera del área
+                if (!pieza.contains(target)) {
+                    alert('¡Hiciste clic fuera del área!');
+                }
+            }
+
+
             // Verifica que el elemento de destino sea válido
             if (e.target.dataset.id === id) {
-                const pais = e.target.dataset.id;
-                infoBox.textContent = pais;
+                //infoContent = pais;
                 e.target.appendChild(pieza);
                 e.target.addEventListener('click', () => {
-                    infoBox.style.display = 'block'; 
-                    /*if (infoBox.style.display === 'block') {
-                        // Si infoBox está visible, ocultarlo
-                        infoBox.style.display = 'none'; 
-                    }*/
+                    infoBox.style.display = 'block';
+                    if (!pieza.contains(event.target)) {
+                        alert('¡Hiciste clic fuera del área!');
+                    }
                 });
+                //e.target.addEventListener('click', manejarClickFuera);
+                
+                
+                /*document.addEventListener('click', (event) => {
+                // Verifica si el clic fue fuera del infoBox y del botón
+                    if (!infoBox.contains(event.target)) {
+                        //event.stopPropagation();
+                        if (infoBox.style.display === 'block'){
+                            infoBox.style.display = 'none';
+                        }
+                    }
+                });*/
+
+                //console.log(infoBox.style.display);
                 terminado--;
 
                 if (terminado === 0) {
@@ -352,10 +397,7 @@ echo "<h1>".$contraseña."</h1>";
         echo "
             <div id='infoBox'>
             <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'>Texto editable...</h1>
-            <form action='/ruta/al/servidor' method='post' enctype='multipart/form-data'>
-            <label for='archivo'>Elige un archivo:</label>
-            <input type='file' id='archivo' name='archivo'>
+            <h1 id='infoContent' rows='10' cols='50'></h1>
             <br><br>
             <input type='submit' value='Subir Archivo'>
         </form>
