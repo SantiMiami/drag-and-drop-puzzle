@@ -1,11 +1,3 @@
-<?php
-$usuario = $_GET['nombre'];
-$contraseña = $_GET['contraseña'];
-echo "<h1>".$usuario."</h1>";
-echo "<h1>".$contraseña."</h1>";
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,24 +7,6 @@ echo "<h1>".$contraseña."</h1>";
     <style>
         body {
             font-family: Arial, Verdana, sans-serif;
-        }
-        #infoBox {
-            display: none; /* Ocultar inicialmente */
-            position: fixed;
-            top: 5%;
-            left: 50%;
-            transform: translate(-50%, 0);
-            width: 80%;
-            max-width: 600px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Estilo del botón */
-        #toggleButton {
-            display: none; /* Ocultar inicialmente */
         }
 
         #piezas {
@@ -57,11 +31,11 @@ echo "<h1>".$contraseña."</h1>";
         }
 
         .pieza {
-            width: 165px;
-            height: 105px;
+            width: 106px;
+            height: 165px;
             background-size: cover;
             margin: 10px;
-            border-radius: 50%;
+            /*border-radius: 50%;*/
             background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
             background-position: center; /* Centra la imagen */
             background-repeat: no-repeat;
@@ -102,6 +76,9 @@ echo "<h1>".$contraseña."</h1>";
         .Republica_de_irlanda .pieza {
             margin: 0;
         }
+
+
+
         .Irlanda_del_norte {
             position: relative;
             top: 450px;
@@ -163,7 +140,7 @@ echo "<h1>".$contraseña."</h1>";
         .Escocia {
             position: relative;
             top: 170px;
-            left: 110px;
+            left: 130px;
             background-color: #ce0808;
             outline: 1px solid #333;
             border-radius: 50%;
@@ -186,9 +163,9 @@ echo "<h1>".$contraseña."</h1>";
             left: 360px;
             background-color: #08cece;
             outline: 1px solid #333333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
+            /*border-radius: 50%;*/
+            width: 115px;
+            height: 180px;
             transition: 1s;
         }
 
@@ -197,7 +174,7 @@ echo "<h1>".$contraseña."</h1>";
         }
 
         .Londres.pieza {
-            margin: 0;
+            margin: 1;
         }
 
         #mensaje {
@@ -234,54 +211,17 @@ echo "<h1>".$contraseña."</h1>";
         <div id="piezas"></div>
     </div>
     <h1 id="mensaje">¡Ganaste!</h1>
-    <!-- Funciones del administrador -->
-    <?php
-     if ($usuario == 'admin' and $contraseña == md5('admin')){
-        echo "
-            <div id='infoBox'>
-            <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'>Texto editable...</h1>
-            <form action='/ruta/al/servidor' method='post' enctype='multipart/form-data'>
-            <label for='archivo'>Elige un archivo:</label>
-            <input type='file' id='archivo' name='archivo'>
-            <br><br>
-            <input type='submit' value='Subir Archivo'>
-        </form>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='200' height='200'>
-            <br>
-            <button onclick='saveInfo()'>Guardar</button>
-        </div>
-        <button id='toggleButton' onclick='toggleInfoBox()'>Mostrar Recuadro</button>";
-    } else{
-        echo "<div id='infoBox'>
-            <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'>Texto editable...</h1>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='600' height='400'>
-            <br><br>
-            <input type='submit' value='Subir Archivo'>";
-    } 
-    ?>
-
-
+   
+    
     <script>
         const Reino_unido = [
-            { name: 'Inglaterra', image: 'images/Inglaterra.png', description: 'Descripción de Inglaterra' },
-            { name: 'Escocia', image: 'images/Escocia.png', description: 'Descripción de Escocia' },
-            { name: 'Pais_de_gales', image: 'images/Pais_de_gales.png', description: 'Descripción del País de Gales' },
-            { name: 'Irlanda_del_norte', image: 'images/Irlanda_del_norte.png', description: 'Descripción de Irlanda del Norte' },
-            { name: 'Republica_de_irlanda', image: 'images/Republica_de_irlanda.png', description: 'Descripción de la República de Irlanda' },
-            { name: 'Londres', image: 'images/Londres.png', description: 'Descripción de Londres' }
+            'Inglaterra', 'Escocia', 'Pais_de_gales',
+            'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
         ];
 
         const puzzle = document.getElementById('puzzle');
         const piezas = document.getElementById('piezas');
         const mensaje = document.getElementById('mensaje');
-        const infoContainer = document.getElementById('info-container');
-        const infoTitle = document.getElementById('info-title');
-        const infoDescription = document.getElementById('info-description');
-        const infoClose = document.getElementById('info-close');
-        const infoContent = document.getElementById('infoContent');
-        const infoBox = document.getElementById('infoBox');
 
         let terminado = Reino_unido.length;
 
@@ -289,28 +229,19 @@ echo "<h1>".$contraseña."</h1>";
         Reino_unido.forEach(pais => {
             const div = document.createElement('div');
             div.className = 'pieza';
-            div.id = pais.name;
+            div.id = pais;
             div.draggable = true;
-            //console.log(pais);
-            div.style.backgroundImage = `url('${pais.image}')`; // Asignar imagen de fondo
+            div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             piezas.appendChild(div);
         });
-
-        /*Reino_unido_ids.forEach(pais_id => {
-            const div = document.createElement('div');
-            div.className = 'pieza';
-            div.id = pais_id;
-            console.log(div);
-            div.addEventListener('click', () => {
-                console.log('holanda');
-            });
-        });*/
 
         // Crear las áreas del rompecabezas
         Reino_unido.forEach(pais => {
             const div = document.createElement('div');
-            div.className = 'placeholder puzzle-area ' + pais.name;
-            div.dataset.id = pais.name;
+            div.className = pais;
+            div.dataset.id = pais;
+            div.textContent = pais;
+            //div.style.backgroundImage = `url('images/${pais}.png')`; // Asignar imagen de fondo
             puzzle.appendChild(div);
         });
 
@@ -326,7 +257,6 @@ echo "<h1>".$contraseña."</h1>";
         puzzle.addEventListener('dragleave', e => {
             e.target.classList.remove('hover');
         });
-        // Función para manejar el clic fuera del área
 
         puzzle.addEventListener('drop', e => {
             e.preventDefault();
@@ -335,64 +265,17 @@ echo "<h1>".$contraseña."</h1>";
             const id = e.dataTransfer.getData('id');
             const pieza = document.getElementById(id);
 
-        document.addEventListener('click', function(event){
-            if (event.target.id === id){
-                infoBox.style.display = 'block';
-                console.log(infoBox.style.display);  
-                if (infoBox.style.display === 'none'){
-                    infoBox.style.display = 'block';
-                } 
-            } else{
-                console.log('Otro elemento');
-                if (infoBox.style.display === 'block'){
-                    infoBox.style.display = 'none';
-                }
-            }
-        });
-
-            /*function handleClickOutside(e) {
-                if (e.target.contains(e.target)) {
-                    console.log(e.target);
-                } else{
-                    console.log('Clic fuera del área.');
-                }
-            }*/
-
             // Verifica que el elemento de destino sea válido
             if (e.target.dataset.id === id) {
-                //infoContent = pais;
                 e.target.appendChild(pieza);
                 terminado--;
 
                 if (terminado === 0) {
                     document.body.classList.add('ganaste');
-                    document.getElementById('infoButton').style.display = 'block';
                 }
             }
         });
+
     </script>
-    <?php
-     /*if ($usuario == 'admin' and $contraseña == md5('admin')){
-        echo "
-            <div id='infoBox'>
-            <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'></h1>
-            <br><br>
-            <input type='submit' value='Subir Archivo'>
-        </form>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='200' height='200'>
-            <br>
-            <button onclick='saveInfo()'>Guardar</button>
-        </div>
-        <button id='toggleButton' onclick='toggleInfoBox()'>Mostrar Recuadro</button>";
-    } else{
-        echo "<div id='infoBox'>
-            <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'>Texto editable...</h1>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='600' height='400'>
-            <br><br>
-            <input type='submit' value='Subir Archivo'>";
-    } */
-    ?>
 </body>
 </html>
