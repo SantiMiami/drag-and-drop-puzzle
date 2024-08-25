@@ -1,9 +1,6 @@
 <?php
 $usuario = $_GET['nombre'];
 $contraseña = $_GET['contraseña'];
-echo "<h1>".$usuario."</h1>";
-echo "<h1>".$contraseña."</h1>";
-
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +13,31 @@ echo "<h1>".$contraseña."</h1>";
         body {
             font-family: Arial, Verdana, sans-serif;
         }
+        .descripcion {
+            display: block; /* Inicialmente oculto */
+            position: absolute;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        /* Estilo para el área de texto */
+        .descripcion textarea {
+            width: 100%;
+            height: 100px;
+            border: none;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            font-size: 14px;
+        }
+        /* Estilo para el botón de edición */
+        #editar {
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
         #infoBox {
             display: none; /* Ocultar inicialmente */
             position: fixed;
@@ -239,31 +261,31 @@ echo "<h1>".$contraseña."</h1>";
      if ($usuario == 'admin' and $contraseña == md5('admin')){
         echo "
             <div id='infoBox'>
-            <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'>Texto editable...</h1>
+            <h2 id = Pais></h2>
+            <h2 id = description>Descripción del pais</h2>
+            <textarea id='textoDescripcion' placeholder='Cambia la descripción aqui'></textarea>
             <form action='/ruta/al/servidor' method='post' enctype='multipart/form-data'>
-            <label for='archivo'>Elige un archivo:</label>
+            <label for='archivo'>Cambiar imagen del Estadio</label>
             <input type='file' id='archivo' name='archivo'>
+            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='200' height='200'>
             <br><br>
             <input type='submit' value='Subir Archivo'>
         </form>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='200' height='200'>
-            <br>
-            <button onclick='saveInfo()'>Guardar</button>
         </div>
         <button id='toggleButton' onclick='toggleInfoBox()'>Mostrar Recuadro</button>";
     } else{
         echo "<div id='infoBox'>
-            <h2>Información</h2>
-            <h1 id='infoContent' rows='10' cols='50'>Texto editable...</h1>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='600' height='400'>
-            <br><br>
-            <input type='submit' value='Subir Archivo'>";
+            <h2 id = Pais></h2>
+            <h2 id = description>Descripción del pais</h2>
+            <img src = '../Codes/Reino_unido.png' alt='Descripción de la imagen' width='600' height='400'>
+            <br><br>";
     } 
     ?>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
+        usuario = <?php echo json_encode($usuario); ?>;
+        contraseña = <?php echo json_encode($contraseña); ?>;
+
         const Reino_unido = [
             { name: 'Inglaterra', image: 'images/Inglaterra.png', description: 'Descripción de Inglaterra' },
             { name: 'Escocia', image: 'images/Escocia.png', description: 'Descripción de Escocia' },
@@ -272,6 +294,11 @@ echo "<h1>".$contraseña."</h1>";
             { name: 'Republica_de_irlanda', image: 'images/Republica_de_irlanda.png', description: 'Descripción de la República de Irlanda' },
             { name: 'Londres', image: 'images/Londres.png', description: 'Descripción de Londres' }
         ];
+
+        Reino_unido_description = {
+            'Londres':'Londres es la capital y la ciudad más grande del Reino Unido. Ubicada en el sureste de Inglaterra a lo largo del río Támesis, es un importante centro global para la finanza, la cultura, el arte y la política.',
+            'Inglaterra':'Inglaterra es un país ubicado en la isla de Gran Bretaña, en el noreste de Europa. Es una de las cuatro naciones constituyentes del Reino Unido, junto con Escocia, Gales e Irlanda del Norte. Su capital es Londres, una ciudad globalmente influyente en finanzas, cultura y política.'
+        };
 
         const puzzle = document.getElementById('puzzle');
         const piezas = document.getElementById('piezas');
@@ -282,7 +309,9 @@ echo "<h1>".$contraseña."</h1>";
         const infoClose = document.getElementById('info-close');
         const infoContent = document.getElementById('infoContent');
         const infoBox = document.getElementById('infoBox');
-
+        description = document.getElementById('description');
+        Pais = document.getElementById('Pais');
+        
         let terminado = Reino_unido.length;
 
         // Crear las piezas y agregarlas al contenedor de piezas
@@ -291,7 +320,6 @@ echo "<h1>".$contraseña."</h1>";
             div.className = 'pieza';
             div.id = pais.name;
             div.draggable = true;
-            //console.log(pais);
             div.style.backgroundImage = `url('${pais.image}')`; // Asignar imagen de fondo
             piezas.appendChild(div);
         });
@@ -300,11 +328,18 @@ echo "<h1>".$contraseña."</h1>";
             const div = document.createElement('div');
             div.className = 'pieza';
             div.id = pais_id;
-            console.log(div);
             div.addEventListener('click', () => {
-                console.log('holanda');
             });
         });*/
+
+        const idsAdmin = ['archivo', 'textoDescripcion', 'infoBox'];
+        const idUser = ['infoBox'];
+
+        // Obtener los elementos en base a los IDs
+        const elementos = usuario == 'admin' && contraseña == CryptoJS.MD5('admin').toString() ? idsAdmin.map(id => document.getElementById(id)) : idUser.map(id => document.getElementById(id));
+
+        // Verificar si todos los elementos están presentes
+        //const todosPresentes = elementos.every(elemento => elemento !== null);
 
         // Crear las áreas del rompecabezas
         Reino_unido.forEach(pais => {
@@ -328,6 +363,10 @@ echo "<h1>".$contraseña."</h1>";
         });
         // Función para manejar el clic fuera del área
 
+        document.addEventListener('click', function(event){
+            console.log(`Element cliqueado: ${event.target.id}`);
+        });
+
         puzzle.addEventListener('drop', e => {
             e.preventDefault();
             e.target.classList.remove('hover');
@@ -336,18 +375,56 @@ echo "<h1>".$contraseña."</h1>";
             const pieza = document.getElementById(id);
 
         document.addEventListener('click', function(event){
-            if (event.target.id === id){
-                infoBox.style.display = 'block';
-                console.log(infoBox.style.display);  
-                if (infoBox.style.display === 'none'){
-                    infoBox.style.display = 'block';
-                } 
-            } else{
-                console.log('Otro elemento');
-                if (infoBox.style.display === 'block'){
-                    infoBox.style.display = 'none';
+            idTarget = event.target.id;
+
+            bolElement = 0;
+            bolCountry = 0;
+            
+            
+                elementos.forEach(elements =>{
+                console.log(elements[0]);
+                if (idTarget === elements.id){
+                    bolElement = 1;
                 }
-            }
+                console.log(`Elementos de acuerdo al usuario: ${elements.id}`);
+                //console.log(event.target.id === elements.id);
+            });
+             /*else{
+                    elementos.forEach(elements =>{
+                    console.log(elements.id);
+                    if (idTarget === elements.id){
+                        bolElement = 1;
+                    }
+                    console.log(bolElement);
+                });
+            }*/
+            
+            Reino_unido.forEach(Contrys =>{
+                //console.log(idTarget === Contrys.name);
+                //console.log(Contrys.name);
+                if (idTarget === Contrys.name){
+                    //console.log(idTarget === Contrys.id);
+                    bolCountry = 1;
+                }
+                //console.log(bolElement);
+                //console.log(event.target.id === elements.id);
+            });
+                
+                if (bolCountry === 1 || bolElement === 1){
+                    infoBox.style.display = 'block';
+                    if (bolCountry === 1){
+                        Pais.textContent = idTarget;
+                        description.textContent = Reino_unido.idTarget;
+                    } 
+                    if (infoBox.style.display === 'none'){
+                        infoBox.style.display = 'block';
+                    } 
+                } else{
+                    console.log('Otro elemento');
+                    if (infoBox.style.display === 'block'){
+                        infoBox.style.display = 'none';
+                    }
+                }
         });
 
             /*function handleClickOutside(e) {
