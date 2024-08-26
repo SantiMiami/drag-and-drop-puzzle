@@ -1,6 +1,16 @@
 <?php
+session_start();
 $usuario = $_GET['nombre'];
 $contraseña = $_GET['contraseña'];
+$Description = isset($_POST['textoDescripcion']) ? $_POST['textoDescripcion'] : 0;
+$Image = isset($_POST['image']) ? $_POST['image'] : 0;
+
+
+$_SESSION['nombre'] = htmlspecialchars($usuario);
+$_SESSION['contraseña'] = htmlspecialchars($contraseña);
+//echo "<h1>".$_SESSION['nombre']."</h1>";
+//echo "<h1>".$_SESSION['contraseña']."</h1>";
+
 ?>
 
 <!DOCTYPE html>
@@ -258,19 +268,19 @@ $contraseña = $_GET['contraseña'];
     <h1 id="mensaje">¡Ganaste!</h1>
     <!-- Funciones del administrador -->
     <?php
-     if ($usuario == 'admin' and $contraseña == md5('admin')){
+     if ($_SESSION['nombre'] == 'admin' and $_SESSION['contraseña'] == md5('admin')){
         echo "
             <div id='infoBox'>
             <h2 id = Pais></h2>
             <h2 id = description>Descripción del pais</h2>
-            <textarea id='textoDescripcion' placeholder='Cambia la descripción aqui'></textarea>
-            <form action='/ruta/al/servidor' method='post' enctype='multipart/form-data'>
-            <label for='archivo'>Cambiar imagen del Estadio</label>
-            <input type='file' id='archivo' name='archivo'>
-            <img src='../Codes/Reino_unido.png' alt='Descripción de la imagen' width='200' height='200'>
-            <br><br>
-            <input type='submit' value='Subir Archivo'>
-        </form>
+            <form action='Cambios_en_pagina.php' method='post' enctype='multipart/form-data'>
+                <textarea id='textoDescripcion' placeholder='Cambia la descripción aqui'></textarea>
+                <label for='archivo'>Cambiar imagen del Estadio</label>
+                <input type='file' id='image' name='image'>
+                <img id = 'imagen' src='' alt='Descripción de la imagen' width='200' height='200'>
+                <br><br>
+                <input type='submit' value='Subir Imagen'>
+            </form>
         </div>
         <button id='toggleButton' onclick='toggleInfoBox()'>Mostrar Recuadro</button>";
     } else{
@@ -285,6 +295,8 @@ $contraseña = $_GET['contraseña'];
     <script>
         usuario = <?php echo json_encode($usuario); ?>;
         contraseña = <?php echo json_encode($contraseña); ?>;
+        var AlmDescripcion = '';
+        var AlmImagen = '';
 
         const Reino_unido = [
             { name: 'Inglaterra', image: 'images/Inglaterra.png', description: 'Descripción de Inglaterra' },
@@ -297,7 +309,11 @@ $contraseña = $_GET['contraseña'];
 
         Reino_unido_description = {
             'Londres':'Londres es la capital y la ciudad más grande del Reino Unido. Ubicada en el sureste de Inglaterra a lo largo del río Támesis, es un importante centro global para la finanza, la cultura, el arte y la política.',
-            'Inglaterra':'Inglaterra es un país ubicado en la isla de Gran Bretaña, en el noreste de Europa. Es una de las cuatro naciones constituyentes del Reino Unido, junto con Escocia, Gales e Irlanda del Norte. Su capital es Londres, una ciudad globalmente influyente en finanzas, cultura y política.'
+            'Inglaterra':'Inglaterra es un país ubicado en la isla de Gran Bretaña, en el noreste de Europa. Es una de las cuatro naciones constituyentes del Reino Unido, junto con Escocia, Gales e Irlanda del Norte. Su capital es Londres, una ciudad globalmente influyente en finanzas, cultura y política.',
+            'Pais_de_gales':'El País de Gales es conocido por sus paisajes montañosos, costas escénicas, y castillos históricos. La lengua galés tiene un papel importante en la cultura galesa. También es famoso por sus festivales de música y su herencia minera.',
+            'Irlanda_del_norte':'Irlanda del Norte es conocida por sus paisajes rurales y urbanos, la vibrante ciudad de Belfast y su historia política compleja. El área es famosa por sus paisajes naturales como la Calzada del Gigante y su rica herencia cultural e histórica.',
+            'Republica_de_irlanda':'La República de Irlanda es conocida por sus verdes paisajes, rica herencia cultural, y su vibrante vida urbana en ciudades como Dublín y Cork. También es famosa por su literatura, música tradicional y festivales culturales.',
+            'Escocia':'Escocia es conocida por sus paisajes montañosos, lagos (incluido el famoso Loch Ness), y su rica historia y cultura. Es famosa por su whisky, castillos históricos y festivales como el Edinburgh Festival Fringe.'
         };
 
         const puzzle = document.getElementById('puzzle');
@@ -309,8 +325,9 @@ $contraseña = $_GET['contraseña'];
         const infoClose = document.getElementById('info-close');
         const infoContent = document.getElementById('infoContent');
         const infoBox = document.getElementById('infoBox');
-        description = document.getElementById('description');
-        Pais = document.getElementById('Pais');
+        textoDescripcion = document.getElementById('textoDescripcion');
+        Imagen = document.getElementById('imagen');
+        Boton = document.getElementById('Changes');
         
         let terminado = Reino_unido.length;
 
@@ -332,12 +349,12 @@ $contraseña = $_GET['contraseña'];
             });
         });*/
 
-        const idsAdmin = ['archivo', 'textoDescripcion', 'infoBox'];
+        const idsAdmin = ['imagen', 'textoDescripcion', 'infoBox'];
         const idUser = ['infoBox'];
 
         // Obtener los elementos en base a los IDs
-        const elementos = usuario == 'admin' && contraseña == CryptoJS.MD5('admin').toString() ? idsAdmin.map(id => document.getElementById(id)) : idUser.map(id => document.getElementById(id));
-
+        const elementos = usuario === 'admin' && contraseña === CryptoJS.MD5('admin').toString() ? idsAdmin.map(id => document.getElementById(id)) : idUser.map(id => document.getElementById(id));
+        console.log(elementos);
         // Verificar si todos los elementos están presentes
         //const todosPresentes = elementos.every(elemento => elemento !== null);
 
@@ -363,10 +380,6 @@ $contraseña = $_GET['contraseña'];
         });
         // Función para manejar el clic fuera del área
 
-        document.addEventListener('click', function(event){
-            console.log(`Element cliqueado: ${event.target.id}`);
-        });
-
         puzzle.addEventListener('drop', e => {
             e.preventDefault();
             e.target.classList.remove('hover');
@@ -379,14 +392,29 @@ $contraseña = $_GET['contraseña'];
 
             bolElement = 0;
             bolCountry = 0;
+
+            function guardarContenido(){
+                AlmDescripcion = textoDescripcion.innerHTML;
+                AlmImagen = Imagen.innerHTML;
             
+                var changeImagen = Imagen.value;
+                console.log(changeImagen);
+                Reino_unido_description[idTarget] = textoDescripcion.value;
+                //Imagen.scr = changeImagen;
+                console.log(Reino_unido_description[idTarget]);
+            }
+
+            
+            /*event.target.Boton.addEventListener('click', function() {
+                
+            });*/
             
                 elementos.forEach(elements =>{
-                console.log(elements[0]);
+                //console.log(elements[0]);
                 if (idTarget === elements.id){
                     bolElement = 1;
                 }
-                console.log(`Elementos de acuerdo al usuario: ${elements.id}`);
+                //console.log(`Elementos de acuerdo al usuario: ${elements.id}`);
                 //console.log(event.target.id === elements.id);
             });
              /*else{
@@ -413,14 +441,16 @@ $contraseña = $_GET['contraseña'];
                 if (bolCountry === 1 || bolElement === 1){
                     infoBox.style.display = 'block';
                     if (bolCountry === 1){
+                        //console.log(Reino_unido_description[idTarget]);
                         Pais.textContent = idTarget;
-                        description.textContent = Reino_unido.idTarget;
+                        description.textContent = Reino_unido_description[idTarget];
+                        Boton.addEventListener('click', guardarContenido);
                     } 
                     if (infoBox.style.display === 'none'){
                         infoBox.style.display = 'block';
                     } 
                 } else{
-                    console.log('Otro elemento');
+                    //console.log('Otro elemento');
                     if (infoBox.style.display === 'block'){
                         infoBox.style.display = 'none';
                     }
