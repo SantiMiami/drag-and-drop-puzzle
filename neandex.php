@@ -382,16 +382,43 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
 
         puzzle.addEventListener('drop', e => {
             e.preventDefault();
-            e.target.classList.remove('hover');
 
+
+            e.target.classList.remove('hover');
             const id = e.dataTransfer.getData('id');
             const pieza = document.getElementById(id);
+
+            idTarget = e.target.id;
+
+            bolElement = false;
+            bolCountry = false;
+
+            elementos.forEach(elements =>{
+                if (idTarget === elements.id) bolElement = true;
+            });
+
+            Reino_unido.forEach(Contrys =>{
+                if (idTarget === Contrys.name) bolCountry = true;
+            });
+                
+            if (bolCountry || bolElement){
+                infoBox.style.display = 'block';
+                if (bolCountry){
+                    Pais.textContent = idTarget;
+                    description.textContent = Reino_unido_description[idTarget];
+                    Boton.addEventListener('click', guardarContenido);
+                } 
+                if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
+            } else{
+                    if (infoBox.style.display === 'block') infoBox.style.display = 'none';
+                }
+
 
         document.addEventListener('click', function(event){
             idTarget = event.target.id;
 
-            bolElement = 0;
-            bolCountry = 0;
+            bolElement = false;
+            bolCountry = false;
 
             function guardarContenido(){
                 AlmDescripcion = textoDescripcion.innerHTML;
@@ -404,72 +431,54 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
                 console.log(Reino_unido_description[idTarget]);
             }
 
-            
-            /*event.target.Boton.addEventListener('click', function() {
-                
-            });*/
-            
-                elementos.forEach(elements =>{
-                //console.log(elements[0]);
-                if (idTarget === elements.id){
-                    bolElement = 1;
-                }
-                //console.log(`Elementos de acuerdo al usuario: ${elements.id}`);
-                //console.log(event.target.id === elements.id);
+            elementos.forEach(elements =>{
+                if (idTarget === elements.id) bolElement = true;
             });
-             /*else{
-                    elementos.forEach(elements =>{
-                    console.log(elements.id);
-                    if (idTarget === elements.id){
-                        bolElement = 1;
-                    }
-                    console.log(bolElement);
-                });
-            }*/
-            
+
             Reino_unido.forEach(Contrys =>{
-                //console.log(idTarget === Contrys.name);
-                //console.log(Contrys.name);
-                if (idTarget === Contrys.name){
-                    //console.log(idTarget === Contrys.id);
-                    bolCountry = 1;
-                }
-                //console.log(bolElement);
-                //console.log(event.target.id === elements.id);
+                if (idTarget === Contrys.name) bolCountry = true;
             });
                 
-                if (bolCountry === 1 || bolElement === 1){
-                    infoBox.style.display = 'block';
-                    if (bolCountry === 1){
-                        //console.log(Reino_unido_description[idTarget]);
-                        Pais.textContent = idTarget;
-                        description.textContent = Reino_unido_description[idTarget];
-                        Boton.addEventListener('click', guardarContenido);
-                    } 
-                    if (infoBox.style.display === 'none'){
-                        infoBox.style.display = 'block';
-                    } 
-                } else{
-                    //console.log('Otro elemento');
-                    if (infoBox.style.display === 'block'){
-                        infoBox.style.display = 'none';
-                    }
+            if (bolCountry || bolElement){
+                infoBox.style.display = 'block';
+                if (bolCountry){
+                    Pais.textContent = idTarget;
+                    description.textContent = Reino_unido_description[idTarget];
+                    Boton.addEventListener('click', guardarContenido);
+                } 
+                if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
+            } else{
+                    if (infoBox.style.display === 'block') infoBox.style.display = 'none';
                 }
         });
 
-            /*function handleClickOutside(e) {
-                if (e.target.contains(e.target)) {
-                    console.log(e.target);
-                } else{
-                    console.log('Clic fuera del área.');
-                }
-            }*/
-
-            // Verifica que el elemento de destino sea válido
             if (e.target.dataset.id === id) {
-                //infoContent = pais;
                 e.target.appendChild(pieza);
                 terminado--;
+                idTarget = e.target.id;
+
+            bolElement = false;
+            bolCountry = false;
+
+            elementos.forEach(elements =>{
+                if (idTarget === elements.id) bolElement = true;
+            });
+
+            Reino_unido.forEach(Contrys =>{
+                if (idTarget === Contrys.name) bolCountry = true;
+            });
+                
+            if (bolCountry || bolElement){
+                infoBox.style.display = 'block';
+                if (bolCountry){
+                    Pais.textContent = idTarget;
+                    description.textContent = Reino_unido_description[idTarget];
+                    Boton.addEventListener('click', guardarContenido);
+                } 
+                if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
+            } else{
+                    if (infoBox.style.display === 'block') infoBox.style.display = 'none';
+                }
 
                 if (terminado === 0) {
                     document.body.classList.add('ganaste');
