@@ -388,34 +388,10 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
             const id = e.dataTransfer.getData('id');
             const pieza = document.getElementById(id);
 
-            idTarget = e.target.id;
-
-            bolElement = false;
-            bolCountry = false;
-
-            elementos.forEach(elements =>{
-                if (idTarget === elements.id) bolElement = true;
-            });
-
-            Reino_unido.forEach(Contrys =>{
-                if (idTarget === Contrys.name) bolCountry = true;
-            });
-                
-            if (bolCountry || bolElement){
-                infoBox.style.display = 'block';
-                if (bolCountry){
-                    Pais.textContent = idTarget;
-                    description.textContent = Reino_unido_description[idTarget];
-                    Boton.addEventListener('click', guardarContenido);
-                } 
-                if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
-            } else{
-                    if (infoBox.style.display === 'block') infoBox.style.display = 'none';
-                }
-
 
         document.addEventListener('click', function(event){
             idTarget = event.target.id;
+            console.log(`Dentro del evento de "click" ${idTarget}`);
 
             bolElement = false;
             bolCountry = false;
@@ -444,7 +420,7 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
                 if (bolCountry){
                     Pais.textContent = idTarget;
                     description.textContent = Reino_unido_description[idTarget];
-                    Boton.addEventListener('click', guardarContenido);
+                    //Boton.addEventListener('click', guardarContenido);
                 } 
                 if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
             } else{
@@ -455,36 +431,37 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
             if (e.target.dataset.id === id) {
                 e.target.appendChild(pieza);
                 terminado--;
-                idTarget = e.target.id;
-
-            bolElement = false;
-            bolCountry = false;
-
-            elementos.forEach(elements =>{
-                if (idTarget === elements.id) bolElement = true;
-            });
-
-            Reino_unido.forEach(Contrys =>{
-                if (idTarget === Contrys.name) bolCountry = true;
-            });
+                idTarget = e.target.dataset.id;
+                console.log(`Fuera del evento de "click" ${idTarget}`)
                 
-            if (bolCountry || bolElement){
-                infoBox.style.display = 'block';
-                if (bolCountry){
-                    Pais.textContent = idTarget;
-                    description.textContent = Reino_unido_description[idTarget];
-                    Boton.addEventListener('click', guardarContenido);
-                } 
-                if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
-            } else{
-                    if (infoBox.style.display === 'block') infoBox.style.display = 'none';
-                }
+                bolElement = false;
+                bolCountry = false;
 
-                if (terminado === 0) {
-                    document.body.classList.add('ganaste');
-                    document.getElementById('infoButton').style.display = 'block';
+                elementos.forEach(elements =>{
+                    if (idTarget === elements.id) bolElement = true;
+                });
+
+                Reino_unido.forEach(Contrys =>{
+                    if (idTarget === Contrys.name) bolCountry = true;
+                });
+                    
+                if (bolCountry || bolElement){
+                    infoBox.style.display = 'block';
+                    if (bolCountry){
+                        Pais.textContent = idTarget;
+                        description.textContent = Reino_unido_description[idTarget];
+                        //Boton.addEventListener('click', guardarContenido);
+                    } 
+                    if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
+                } else{
+                        if (infoBox.style.display === 'block') infoBox.style.display = 'none';
+                    }
+
+                    if (terminado === 0) {
+                        document.body.classList.add('ganaste');
+                        document.getElementById('infoBox').style.display = 'block';
+                    }
                 }
-            }
         });
     </script>
     <?php
