@@ -4,7 +4,7 @@ $username = "root"; // Cambia esto a tu nombre de usuario de MySQL
 $password = ""; // Cambia esto a tu contraseña de MySQL
 $database = "reino unido"; // Cambia esto a tu nombre de base de datos
 // Crea la conexión a la base de datos
-$conn = new mysqli($servername, $username, $password, $database);
+$conn = new mysqli($servername, $username, $password, $database, 1331);
 // Verifica la conexión
 if ($conn->connect_error) {
  die("Error de conexión a la base de datos: ".$conn->connect_error);
@@ -16,11 +16,9 @@ if (!isset($_SESSION['Tiempo']))$_SESSION['Tiempo'] = time();
 $Segundos = time() - $_SESSION['Tiempo'];
 
 
-
-if (!$_POST['username'] and !$_POST['password'] and !$_POST['r_username'] and !$_POST['r_password']){
+/*if (!$_POST['username'] and !$_POST['password'] and !$_POST['r_username'] and !$_POST['r_password'] and !$_POST['comentario']){
     header("Location: Inicio_de_sesion.php");
-}
-
+}*/
 
 //Si se ha registrado un usuario
 if (isset($_POST['username']) and isset($_POST['password'])){ 
@@ -67,48 +65,67 @@ if (isset($Usuario) and isset($Contraseña)) { //Si se han ingresado datos de re
         $Segundos = 0;
         exit();
     }
-}
-if (isset($_POST['r_username']) and isset($_POST['r_password'])){ 
-    //Recepcion de datos
-    $r_usuario = $_POST['r_username'];
-    $r_contraseña = $_POST['r_password'];
+} else $UserStarted = $_SESSION['nombre'];
 
-    //Encriptacion
-    $contraseñaEncr = md5($r_contraseña); //Contraseña
-    $usuarioEncr = md5($r_usuario); //Usuario
+if (isset($_POST['Comentario'])){
+    $UserComment = $_POST['Comentario']; //Almacenamiento de comentario
+    //Registro de sesion
+    if (isset($UserComment)) { //Si se han ingresado datos de registro  
+        // Variables para la búsqueda
+        $TableUser = 'usuario';
+        $ColComment = 'comentario';
+
+        // Consulta SQL
+        $sql = "UPDATE $TableUser SET comentario='$UserComment' WHERE nombre = '$UserStarted'";
+        $stmt = $conn->prepare($sql);
+
+        $stmt->execute();
+    }
 }
-//Registro de sesion
-if (isset($r_usuario) and isset($r_contraseña)) { //Si se han ingresado datos de registro  
-    // Variables para la búsqueda
+
+$stmt->close();
+
+
     $strSearchUser = $r_usuario;
     $strSearchPass = $contraseñaEncr;
     $TableUser = 'usuario';
     $ColUser = 'nombre';
     $ColPass = 'contraseña';
 
-    // Consulta SQL
-    $sql = "SELECT * FROM $TableUser WHERE $ColUser = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $strSearchUser); // "s" indica que es una cadena de texto
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        echo "Este usuario ya esta registrado, porfavor, inicie sesión";
-    } else {
-        echo "No se encuentra disponible";
-        $sql = "INSERT INTO `usuario`(`nombre`, `contraseña`) VALUES (?, ?)";
-        $stmtInsert = $conn->prepare($sql);
-        $stmtInsert->bind_param("ss", $strSearchUser, $strSearchPass); // "ss" indica que ambos parámetros son cadenas de texto
-        if ($stmtInsert->execute()) {
-            echo "Nuevo registro insertado correctamente.";
+    if (isset($r_usuario) and isset($r_contraseña)) { //Si se han ingresado datos de registro  
+        // Variables para la búsqueda
+        $strSearchUser = $r_usuario;
+        $strSearchPass = $contraseñaEncr;
+        $TableUser = 'usuario';
+        $ColUser = 'nombre';
+        $ColPass = 'contraseña';
+    
+        // Consulta SQL
+        $sql = "SELECT * FROM $TableUser WHERE $ColUser = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $strSearchUser); // "s" indica que es una cadena de texto
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            echo "Este usuario ya esta registrado. Porfavor, inicie sesión";
         } else {
-            echo "Error: " . $stmtInsert->error;
+            echo "No se encuentra disponible";
+            $sql = "INSERT INTO `usuario`(`nombre`, `contraseña`) VALUES (?, ?)";
+            $stmtInsert = $conn->prepare($sql);
+            $stmtInsert->bind_param("ss", $strSearchUser, $strSearchPass); // "ss" indica que ambos parámetros son cadenas de texto
+            if ($stmtInsert->execute()) {
+                echo "Nuevo registro insertado correctamente.";
+            } else {
+                echo "Error: " . $stmtInsert->error;
+            }
+            $stmtInsert->close();
         }
-        $stmtInsert->close();
+        $stmt->close();
     }
-    $stmt->close();
+
+
     if ($Segundos >= 15) {
         echo "Segundo aviso...";
         session_unset();
@@ -117,7 +134,6 @@ if (isset($r_usuario) and isset($r_contraseña)) { //Si se han ingresado datos d
         $Segundos = 0;
         exit();
     }
-}
         /*if (!file_exists("usuario.txt")){
         fopen("usuario.txt", "w");
         $archUsuario = "usuario.txt"; 

@@ -261,11 +261,22 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
     </style>
 </head>
 <body>
+    <p style = "text-align: center;" id="cronometro">00:00:00</p>
+    <div id = "Boton">
+        <button style = "position: relative; left: 45%;">¡OSTRA TIO UN BOTON!</button>
+    </div>
     <div class="container">
         <div id="puzzle"></div>
         <div id="piezas"></div>
     </div>
-    <h1 id="mensaje">¡Ganaste!</h1>
+    <div id="mensaje">
+        <h1>¡Ganaste!</h1>
+        <form action='Gestion_de_contenido.php' method='post' enctype='multipart/form-data'>
+            <textarea id='Comentario' name = 'Comentario'  placeholder='¡Dejanos tu comentario!'></textarea>
+            <br><br>
+            <input type='submit' value='Enviar comentario'>
+        </form>
+    </div>
     <!-- Funciones del administrador -->
     <?php
      if ($_SESSION['nombre'] == 'admin' and $_SESSION['contraseña'] == md5('admin')){
@@ -289,7 +300,8 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
             <h2 id = description>Descripción del pais</h2>
             <img src = '../Codes/Reino_unido.png' alt='Descripción de la imagen' width='600' height='400'>
             <br><br>";
-    } 
+    }
+
     ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
@@ -327,7 +339,8 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
         const infoBox = document.getElementById('infoBox');
         textoDescripcion = document.getElementById('textoDescripcion');
         Imagen = document.getElementById('imagen');
-        Boton = document.getElementById('Changes');
+        ChangesButton = document.getElementById('Changes');
+        Button = document.getElementById('Boton');
         
         let terminado = Reino_unido.length;
 
@@ -354,7 +367,6 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
 
         // Obtener los elementos en base a los IDs
         const elementos = usuario === 'admin' && contraseña === CryptoJS.MD5('admin').toString() ? idsAdmin.map(id => document.getElementById(id)) : idUser.map(id => document.getElementById(id));
-        console.log(elementos);
         // Verificar si todos los elementos están presentes
         //const todosPresentes = elementos.every(elemento => elemento !== null);
 
@@ -456,12 +468,61 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
                 } else{
                         if (infoBox.style.display === 'block') infoBox.style.display = 'none';
                     }
-
+                    
                     if (terminado === 0) {
                         document.body.classList.add('ganaste');
                         document.getElementById('infoBox').style.display = 'block';
+                        pausarCronometro();
+                        //Button.style.display = "block";
+                    }
+                }                
+        });
+            let segundos = 0;
+            let minutos = 0;
+            let horas = 0;
+            let intervalo;
+
+            function actualizarCronometro() {
+                segundos++;
+                if (segundos >= 60) {
+                    segundos = 0;
+                    minutos++;
+                    if (minutos >= 60) {
+                        minutos = 0;
+                        horas++;
                     }
                 }
+
+                // Formatear la hora, minutos y segundos para que siempre tengan dos dígitos
+                const segundosTexto = segundos < 10 ? '0' + segundos : segundos;
+                const minutosTexto = minutos < 10 ? '0' + minutos : minutos;
+                const horasTexto = horas < 10 ? '0' + horas : horas;
+
+                // Actualizar el contenido del cronómetro
+                document.getElementById('cronometro').innerText = horasTexto + ':' + minutosTexto + ':' + segundosTexto;
+        }
+
+        function iniciarCronometro() {
+            intervalo = setInterval(actualizarCronometro, 1000); // Actualiza cada segundo
+            console.log(intervalo);
+        }
+
+        function pausarCronometro() {
+            clearInterval(intervalo);
+            console.log(segundos);
+        }
+
+        function reiniciarCronometro() {
+            clearInterval(intervalo);
+            segundos = 0;
+            minutos = 0;
+            horas = 0;
+            document.getElementById('cronometro').innerText = '00:00:00';
+        }    
+
+        Button.addEventListener('click', function() {
+            Button.style.display = "none";
+            iniciarCronometro();
         });
     </script>
     <?php

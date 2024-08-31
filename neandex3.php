@@ -3,43 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detectar clics</title>
-    <style>
-        #area {
-            width: 200px;
-            height: 200px;
-            background-color: lightblue;
-            position: absolute;
-            top: 50px;
-            left: 50px;
-            border: 2px solid blue;
-        }
-    </style>
+    <title>Cronómetro con JavaScript</title>
 </head>
 <body>
-    <div id="area"></div>
+    <h1>Cronómetro</h1>
+    <p id="cronometro">00:00:00</p>
+    <button onclick="iniciarCronometro()">Iniciar</button>
+    <button onclick="pausarCronometro()">Pausar</button>
+    <button onclick="reiniciarCronometro()">Reiniciar</button>
 
     <script>
-        // Obtener el elemento que queremos observar
-        const area = document.getElementById('area');
+        let segundos = 0;
+        let minutos = 0;
+        let horas = 0;
+        let intervalo;
 
-        // Función para manejar el clic dentro del área
-        function handleClickInside(event) {
-            console.log('Clic dentro del área.');
-        }
-
-        // Función para manejar el clic fuera del área
-        function handleClickOutside(event) {
-            if (!area.contains(event.target)) {
-                console.log('Clic fuera del área.');
+        function actualizarCronometro() {
+            segundos++;
+            if (segundos >= 60) {
+                segundos = 0;
+                minutos++;
+                if (minutos >= 60) {
+                    minutos = 0;
+                    horas++;
+                }
             }
+
+            // Formatear la hora, minutos y segundos para que siempre tengan dos dígitos
+            const segundosTexto = segundos < 10 ? '0' + segundos : segundos;
+            const minutosTexto = minutos < 10 ? '0' + minutos : minutos;
+            const horasTexto = horas < 10 ? '0' + horas : horas;
+
+            // Actualizar el contenido del cronómetro
+            document.getElementById('cronometro').innerText = horasTexto + ':' + minutosTexto + ':' + segundosTexto;
         }
 
-        // Agregar el evento de clic al documento
-        document.addEventListener('click', handleClickOutside);
+        function iniciarCronometro() {
+            intervalo = setInterval(actualizarCronometro, 1000); // Actualiza cada segundo
+        }
 
-        // Agregar el evento de clic al área
-        area.addEventListener('click', handleClickInside);
+        function pausarCronometro() {
+            clearInterval(intervalo);
+        }
+
+        function reiniciarCronometro() {
+            clearInterval(intervalo);
+            segundos = 0;
+            minutos = 0;
+            horas = 0;
+            document.getElementById('cronometro').innerText = '00:00:00';
+        }
     </script>
 </body>
 </html>
