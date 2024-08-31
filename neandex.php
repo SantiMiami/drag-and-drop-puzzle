@@ -263,7 +263,7 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
 <body>
     <p style = "text-align: center;" id="cronometro">00:00:00</p>
     <div id = "Boton">
-        <button style = "position: relative; left: 45%;">¡OSTRA TIO UN BOTON!</button>
+        <button style = "position: relative; left: 45%;">INICIO</button>
     </div>
     <div class="container">
         <div id="puzzle"></div>
@@ -341,7 +341,7 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
         Imagen = document.getElementById('imagen');
         ChangesButton = document.getElementById('Changes');
         Button = document.getElementById('Boton');
-        
+
         let terminado = Reino_unido.length;
 
         // Crear las piezas y agregarlas al contenedor de piezas
@@ -378,105 +378,6 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
             puzzle.appendChild(div);
         });
 
-        piezas.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('id', e.target.id);
-        });
-
-        puzzle.addEventListener('dragover', e => {
-            e.preventDefault();
-            e.target.classList.add('hover');
-        });
-
-        puzzle.addEventListener('dragleave', e => {
-            e.target.classList.remove('hover');
-        });
-        // Función para manejar el clic fuera del área
-
-        puzzle.addEventListener('drop', e => {
-            e.preventDefault();
-
-
-            e.target.classList.remove('hover');
-            const id = e.dataTransfer.getData('id');
-            const pieza = document.getElementById(id);
-
-
-        document.addEventListener('click', function(event){
-            idTarget = event.target.id;
-            console.log(`Dentro del evento de "click" ${idTarget}`);
-
-            bolElement = false;
-            bolCountry = false;
-
-            function guardarContenido(){
-                AlmDescripcion = textoDescripcion.innerHTML;
-                AlmImagen = Imagen.innerHTML;
-            
-                var changeImagen = Imagen.value;
-                console.log(changeImagen);
-                Reino_unido_description[idTarget] = textoDescripcion.value;
-                //Imagen.scr = changeImagen;
-                console.log(Reino_unido_description[idTarget]);
-            }
-
-            elementos.forEach(elements =>{
-                if (idTarget === elements.id) bolElement = true;
-            });
-
-            Reino_unido.forEach(Contrys =>{
-                if (idTarget === Contrys.name) bolCountry = true;
-            });
-                
-            if (bolCountry || bolElement){
-                infoBox.style.display = 'block';
-                if (bolCountry){
-                    Pais.textContent = idTarget;
-                    description.textContent = Reino_unido_description[idTarget];
-                    //Boton.addEventListener('click', guardarContenido);
-                } 
-                if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
-            } else{
-                    if (infoBox.style.display === 'block') infoBox.style.display = 'none';
-                }
-        });
-
-            if (e.target.dataset.id === id) {
-                e.target.appendChild(pieza);
-                terminado--;
-                idTarget = e.target.dataset.id;
-                console.log(`Fuera del evento de "click" ${idTarget}`)
-                
-                bolElement = false;
-                bolCountry = false;
-
-                elementos.forEach(elements =>{
-                    if (idTarget === elements.id) bolElement = true;
-                });
-
-                Reino_unido.forEach(Contrys =>{
-                    if (idTarget === Contrys.name) bolCountry = true;
-                });
-                    
-                if (bolCountry || bolElement){
-                    infoBox.style.display = 'block';
-                    if (bolCountry){
-                        Pais.textContent = idTarget;
-                        description.textContent = Reino_unido_description[idTarget];
-                        //Boton.addEventListener('click', guardarContenido);
-                    } 
-                    if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
-                } else{
-                        if (infoBox.style.display === 'block') infoBox.style.display = 'none';
-                    }
-                    
-                    if (terminado === 0) {
-                        document.body.classList.add('ganaste');
-                        document.getElementById('infoBox').style.display = 'block';
-                        pausarCronometro();
-                        //Button.style.display = "block";
-                    }
-                }                
-        });
             let segundos = 0;
             let minutos = 0;
             let horas = 0;
@@ -504,7 +405,6 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
 
         function iniciarCronometro() {
             intervalo = setInterval(actualizarCronometro, 1000); // Actualiza cada segundo
-            console.log(intervalo);
         }
 
         function pausarCronometro() {
@@ -518,12 +418,117 @@ $_SESSION['contraseña'] = htmlspecialchars($contraseña);
             minutos = 0;
             horas = 0;
             document.getElementById('cronometro').innerText = '00:00:00';
-        }    
+        } 
 
         Button.addEventListener('click', function() {
             Button.style.display = "none";
+            bolDraggable = true;
+            alert(bolDraggable);
             iniciarCronometro();
+            if (bolDraggable){ 
+                piezas.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('id', e.target.id);
+                });
+
+                puzzle.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    e.target.classList.add('hover');
+                });
+
+                puzzle.addEventListener('dragleave', e => {
+                    e.target.classList.remove('hover');
+                });
+            }
         });
+
+        
+            // Función para manejar el clic fuera del área
+
+            puzzle.addEventListener('drop', e => {
+                e.preventDefault();
+        
+            e.target.classList.remove('hover');
+            const id = e.dataTransfer.getData('id');
+            const pieza = document.getElementById(id);
+
+
+            document.addEventListener('click', function(event){
+                idTarget = event.target.id;
+                console.log(`Dentro del evento de "click" ${idTarget}`);
+
+                bolElement = false;
+                bolCountry = false;
+
+                function guardarContenido(){
+                    AlmDescripcion = textoDescripcion.innerHTML;
+                    AlmImagen = Imagen.innerHTML;
+                
+                    var changeImagen = Imagen.value;
+                    console.log(changeImagen);
+                    Reino_unido_description[idTarget] = textoDescripcion.value;
+                    //Imagen.scr = changeImagen;
+                    console.log(Reino_unido_description[idTarget]);
+                }
+
+                elementos.forEach(elements =>{
+                    if (idTarget === elements.id) bolElement = true;
+                });
+
+                Reino_unido.forEach(Contrys =>{
+                    if (idTarget === Contrys.name) bolCountry = true;
+                });
+                    
+                if (bolCountry || bolElement){
+                    infoBox.style.display = 'block';
+                    if (bolCountry){
+                        Pais.textContent = idTarget;
+                        description.textContent = Reino_unido_description[idTarget];
+                        //Boton.addEventListener('click', guardarContenido);
+                    } 
+                    if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
+                } else{
+                        if (infoBox.style.display === 'block') infoBox.style.display = 'none';
+                    }
+            });
+
+                if (e.target.dataset.id === id) {
+                    e.target.appendChild(pieza);
+                    terminado--;
+                    idTarget = e.target.dataset.id;
+                    console.log(`Fuera del evento de "click" ${idTarget}`)
+                    
+                    bolElement = false;
+                    bolCountry = false;
+
+                    elementos.forEach(elements =>{
+                        if (idTarget === elements.id) bolElement = true;
+                    });
+
+                    Reino_unido.forEach(Contrys =>{
+                        if (idTarget === Contrys.name) bolCountry = true;
+                    });
+                        
+                    if (bolCountry || bolElement){
+                        infoBox.style.display = 'block';
+                        if (bolCountry){
+                            Pais.textContent = idTarget;
+                            description.textContent = Reino_unido_description[idTarget];
+                            //Boton.addEventListener('click', guardarContenido);
+                        } 
+                        if (infoBox.style.display === 'none') infoBox.style.display = 'block'; 
+                    } else{
+                            if (infoBox.style.display === 'block') infoBox.style.display = 'none';
+                        }
+                        
+                        if (terminado === 0) {
+                            document.body.classList.add('ganaste');
+                            document.getElementById('infoBox').style.display = 'block';
+                            pausarCronometro();
+                            //Button.style.display = "block";
+                        }
+                    }                
+        });   
+
     </script>
     <?php
      /*if ($usuario == 'admin' and $contraseña == md5('admin')){

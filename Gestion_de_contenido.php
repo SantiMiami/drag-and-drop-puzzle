@@ -4,7 +4,7 @@ $username = "root"; // Cambia esto a tu nombre de usuario de MySQL
 $password = ""; // Cambia esto a tu contraseña de MySQL
 $database = "reino unido"; // Cambia esto a tu nombre de base de datos
 // Crea la conexión a la base de datos
-$conn = new mysqli($servername, $username, $password, $database, 1331);
+$conn = new mysqli($servername, $username, $password, $database);
 // Verifica la conexión
 if ($conn->connect_error) {
  die("Error de conexión a la base de datos: ".$conn->connect_error);

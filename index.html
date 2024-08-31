@@ -1,312 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop (2)</title>
-    <style>
-        body {
-            font-family: Arial, Verdana, sans-serif;
-        }
-
-        #piezas {
-            display: flex;
-            flex-wrap: wrap;
-            width: 200px;
-            margin: auto;
-            justify-content: center;
-        }
-
-        #puzzle {
-            border: 1px solid black;
-            width: 700px;
-            height: 1000px;
-            display: flex;
-            flex-wrap: wrap;
-            margin: auto;
-            background-image: url('Reino_unido.png');
-            background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
-            background-position: center; /* Centra la imagen */
-            background-repeat: no-repeat;
-        }
-
-        .pieza {
-            width: 165px;
-            height: 105px;
-            background-size: cover;
-            margin: 10px;
-            border-radius: 50%;
-            background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
-            background-position: center; /* Centra la imagen */
-            background-repeat: no-repeat;
-        }
-
-        .placeholder {
-            background-color: #F2F2F2;
-            outline: 1px solid #333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .placeholder.hover {
-            background-color: orange;
-        }
-
-        .placeholder .pieza {
-            margin: 0;
-        }
-        .Republica_de_irlanda {
-            position: relative;
-            top: 600px;
-            right: 320px;
-            background-color: #fffb00;
-            outline: 1px solid #333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .Republica_de_irlanda.hover {
-            background-color: orange;
-        }
-
-        .Republica_de_irlanda .pieza {
-            margin: 0;
-        }
-
-
-
-        .Irlanda_del_norte {
-            position: relative;
-            top: 450px;
-            right: 380px;
-            background-color: #00ff37;
-            outline: 1px solid #333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .Irlanda_del_norte.hover {
-            background-color: orange;
-        }
-
-        .Irlanda_del_norte .pieza {
-            margin: 0;
-        }
-        .Inglaterra {
-            position: relative;
-            left: 450px;
-            top: 60px;
-            background-color: #ff00b3;
-            outline: 1px solid #333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .Inglaterra.hover {
-            background-color: orange;
-        }
-
-        .Inglaterra .pieza {
-            margin: 0;
-        }
-        .Pais_de_gales {
-            position: relative;
-            top: 730px;
-            left: 120px;
-            background-color: #2600ff;
-            outline: 1px solid #333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .Pais_de_gales.hover {
-            background-color: orange;
-        }
-
-        .Pais_de_gales .pieza {
-            margin: 0;
-        }
-
-        .Escocia {
-            position: relative;
-            top: 170px;
-            left: 280px;
-            background-color: #ce0808;
-            outline: 1px solid #333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .Escocia.hover {
-            background-color: orange;
-        }
-
-        .Escocia.pieza {
-            margin: 0;
-        }
-
-        .Londres {
-            position: relative;
-            top: 210px;
-            left: 360px;
-            background-color: #08cece;
-            outline: 1px solid #333333;
-            border-radius: 50%;
-            width: 165px;
-            height: 106px;
-            transition: 1s;
-        }
-
-        .Londres.hover {
-            background-color: orange;
-        }
-
-        .Londres.pieza {
-            margin: 0;
-        }
-
-        #mensaje {
-            color: black;
-            text-align: center;
-            display: none;
-        }
-
-        .ganaste {
-            background-color: #B3D67C;
-        }
-
-        .ganaste #mensaje {
-            display: block;
-        }
-
-        .ganaste .placeholder {
-            outline: none;
-        }
-
-        .ganaste #piezas {
-            display: none;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-    </style>
+    <title>Enviar Datos a la Base de Datos</title>
 </head>
 <body>
-    <div class="container">
-        <div id="puzzle"></div>
-        <div id="piezas"></div>
-    </div>
-    <h1 id="mensaje">¡Ganaste!</h1>
-   
-    
+    <form id="miFormulario">
+        <input type="text" id="miDato" placeholder="Escribe algo" />
+        <button type="button" id="miBoton">Enviar</button>
+    </form>
+
     <script>
-        const Reino_unido = [
-            'Inglaterra', 'Escocia', 'Pais_de_gales',
-            'Irlanda_del_norte', 'Republica_de_irlanda', 'Londres'
-        ];
+        document.getElementById('miBoton').addEventListener('click', () => {
+        // Obtener el valor del campo de entrada
+        const miDato = document.getElementById('miDato').value;
 
-        const puzzle = document.getElementById('puzzle');
-        const piezas = document.getElementById('piezas');
-        const mensaje = document.getElementById('mensaje');
-
-        let terminado = Reino_unido.length;
-        
-        while (Reino_unido.length) {
-            const index = Math.floor(Math.random() * Reino_unido.length);
-            const div = document.createElement('div');
-            div.className = 'pieza';
-            div.id = Reino_unido[index];
-            div.draggable = true;
-            div.textContent = Reino_unido[index];
-            div.style.backgroundImage = Reino_unido[index];
-            piezas.appendChild(div);
-            Reino_unido.splice(index, 1);
-        }
-        //for (let i = 0; i < terminado; i++) {
-        const div1 = document.createElement('div');
-        div1.className = 'Escocia';
-        div1.dataset.id = 'Escocia';
-        div1.textContent = 'Escocia';
-        puzzle.appendChild(div1);
-        
-        const div2 = document.createElement('div');
-        div2.className = 'Pais_de_gales';
-        div2.dataset.id = 'Pais_de_gales';
-        div2.textContent = 'Pais_de_gales';
-        puzzle.appendChild(div2);
-
-        const div3 = document.createElement('div');
-        div3.className = 'Republica_de_irlanda';
-        div3.dataset.id = 'Republica_de_irlanda';
-        div3.textContent = 'Republica_de_irlanda';
-        puzzle.appendChild(div3);
-
-        const div4 = document.createElement('div');
-        div4.className = 'Irlanda_del_norte';
-        div4.dataset.id = 'Irlanda_del_norte';
-        div4.textContent = 'Irlanda_del_norte';
-        puzzle.appendChild(div4);
-
-        const div5 = document.createElement('div');
-        div5.className = 'Inglaterra';
-        div5.dataset.id = 'Inglaterra';
-        div5.textContent = 'Inglaterra';
-        puzzle.appendChild(div5);
-
-        const div6 = document.createElement('div');
-        div6.className = 'Londres';
-        div6.dataset.id = 'Londres';
-        div6.textContent = 'Londres';
-        puzzle.appendChild(div6);
-      
-        piezas.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('id', e.target.id);
+        // Enviar el dato al servidor usando fetch
+        fetch('https://tu-servidor.com/api/guardar', { // Cambia esta URL por la de tu servidor
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ dato: miDato }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Éxito:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
-
-        puzzle.addEventListener('dragover', e => {
-            e.preventDefault();
-            e.target.classList.add('hover');
-        });
-
-        puzzle.addEventListener('dragleave', e => {
-            e.target.classList.remove('hover');
-        });
-
-        puzzle.addEventListener('drop', e => {
-            e.target.classList.remove('hover');
-
-            const id = e.dataTransfer.getData('id');
-            const pais = id;
-
-            console.log('Pais: ',pais);
-            console.log('caja: ',e.target.dataset.id);
-
-
-            if (e.target.dataset.id === pais) {
-                e.target.appendChild(document.getElementById(id));
-
-                terminado--;
-
-                if (terminado === 0) {
-                    document.body.classList.add('ganaste');
-                }
-            }
-        });
-
-    </script>
+    });
+    </script> <!-- Tu archivo JavaScript -->
 </body>
 </html>
